@@ -1,0 +1,165 @@
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
+
+Adafruit_PWMServoDriver servos1 = Adafruit_PWMServoDriver(0x40);
+Adafruit_PWMServoDriver servos2 = Adafruit_PWMServoDriver(0x41);
+
+unsigned int pos0=172; // ancho de pulso en cuentas para pocicion 0°
+unsigned int pos180=565; // ancho de pulso en cuentas para la pocicion 180°
+
+
+void setup() {
+  servos1.begin();  
+  servos1.setPWMFreq(60); //Frecuencia PWM de 60Hz o T=16,66ms
+  servos2.begin();  
+  servos2.setPWMFreq(60); //Frecuencia PWM de 60Hz o T=16,66ms
+  setServo1(0,90);
+  setServo1(1,180);
+  setServo1(2,0);
+  setServo1(3,90);
+  setServo2(0,90);
+  setServo2(1,0);
+  setServo2(2,180);
+  setServo2(3,90);
+  delay(3000);
+}
+
+void setServo1(uint8_t n_servo1, int angulo1) {
+  int duty1;
+  duty1=map(angulo1,0,180,pos0, pos180);
+  servos1.setPWM(n_servo1, 0, duty1);  
+   
+}
+
+void setServo2(uint8_t n_servo2, int angulo2) {
+  int duty2;
+  duty2=map(angulo2,0,180,pos0, pos180);
+  servos2.setPWM(n_servo2, 0, duty2); 
+}
+
+void loop() {
+
+   for(int i=180;i>30;i--){      //levanta brazo derecho
+      setServo1(1,i);       
+      delay(5);
+    }
+
+    for(int i=90;i>50;i--){     //ladea pie derecho
+      setServo1(0,i);        
+      delay(20);
+    }
+    
+     for(int i=90;i>60;i--){    //inclina pie izquierdo    
+      setServo2(0,i);        
+      delay(20);
+     }
+
+   for(int i=0;i<6;i++){
+    for(int i=90;i<150;i++){    // Gira pierna derecha varias veces
+      setServo1(3,i);              
+      delay(2);
+    }
+   }
+
+
+    for(int i=150;i>90;i--){    //Posicion inicial pierna derecha  
+      setServo1(3,i);       
+      delay(10);
+    }
+
+    for(int i=0;i<6;i++){        //sacude pie derecho
+      for(int j=50;j<140;j++){
+        setServo1(0,j);
+        delay(2);
+      }
+    }
+ 
+    for(int i=140;i>90;i--){     //Posicion inicial pie derecho
+      setServo1(0,i);
+      delay(20);
+    }    
+
+    for(int i=60;i<90;i++){      //Posicion inicial pie izquierdo
+      setServo2(0,i);
+      delay(20);
+    }
+
+    for(int i=50;i<180;i++){    //baja brazo derecho
+      setServo1(1,i);       
+      delay(5);
+    }
+
+
+
+
+    for(int i=0;i<150;i++){      //levanta brazo izquierdo
+      setServo2(1,i);       
+      delay(5);
+    }
+    
+    for(int i=90;i<145;i++){      //ladea pie izquierdo
+      setServo2(0,i);      
+      delay(25);
+    }
+
+    for(int i=90;i<135;i++){       //inclina pie derecho
+      setServo1(0,i);
+      delay(25);
+    }
+
+   for(int i=0;i<6;i++){
+    for(int i=90;i>30;i--){       //Giro pierna izquierda varias veces 
+      setServo2(3,i);       
+      delay(2);
+    }
+   }
+   
+    for(int i=30;i<90;i++){        //Posisicon inicial pierna izquierda    
+      setServo2(3,i);       
+      delay(5);
+    }
+
+    for(int i=0;i<6;i++){          //sacude pie izquierdo
+      for(int j=145;j>65;j--){
+        setServo2(0,j);
+        delay(2);
+      }
+    }
+
+    for(int i=65;i<90;i++){       //Posicion inicial pie izquierdo
+      setServo2(0,i);
+      delay(25);
+    }    
+
+    for(int i=135;i>90;i--){      //Posicion inicial pie derecho
+      setServo1(0,i);      
+      delay(25);
+    }
+
+     for(int i=150;i>0;i--){      //baja brazo izquierdo
+      setServo2(1,i);       
+      delay(5);
+    }
+
+    for(int i=0;i<90;i++){        //gira brazo derecho
+      setServo1(2,i);              
+      delay(5);
+    }
+
+    for(int i=180;i>90;i--){      //Posicion inicial brazo derecho 
+      setServo2(2,i);       
+      delay(5);
+    }
+   
+    delay(500);
+
+    for(int i=90;i>0;i--){        //gira brazo izquierdo
+      setServo1(2,i);       
+      delay(5);
+    }
+
+    for(int i=90;i<180;i++){      //Posicion inicial brazo izquierdo 
+      setServo2(2,i);       
+      delay(5);
+    } 
+}
